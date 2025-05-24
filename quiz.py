@@ -11,16 +11,20 @@ class Question():
 pygame.init()
 screen = pygame.display.set_mode((1280, 760))
 font = pygame.font.SysFont("Arial", 36)
+font_color = "black"
+backgroundColor = (255,255,255)
+buttonWidth = 700
+buttonHeight = 100
 running = True
 
 answers = []
 question = Question("Jaki jest największy ocean na Ziemi?",["Ocean Atlantycki","Ocean Indyjski","Ocean Arktyczny","Ocean Spokojny"],"Ocean Spokojny")
 
-header = QuestionHeader(640,100,600,100,question.questionTitle,font,"black",(255,255,255))
-b1 = Button_with_text(640,350,600,100,question.answers[0],font,"black",(255,255,255))
-b2 = Button_with_text(640,460,600,100,question.answers[1],font,"black",(255,255,255))
-b3 = Button_with_text(640,570,600,100,question.answers[2],font,"black",(255,255,255))
-b4 = Button_with_text(640,680,600,100,question.answers[3],font,"black",(255,255,255))
+header = QuestionHeader(640,100,buttonWidth,buttonHeight,question.questionTitle,font,font_color ,backgroundColor)
+b1 = Button_with_text(640,350,buttonWidth,buttonHeight,question.answers[0],font,font_color ,backgroundColor)
+b2 = Button_with_text(640,460,buttonWidth,buttonHeight,question.answers[1],font,font_color ,backgroundColor)
+b3 = Button_with_text(640,570,buttonWidth,buttonHeight,question.answers[2],font,font_color ,backgroundColor)
+b4 = Button_with_text(640,680,buttonWidth,buttonHeight,question.answers[3],font,font_color ,backgroundColor)
 
 def checkIfAnswerIsCorrect(answer):
     if answer == question.answer:
