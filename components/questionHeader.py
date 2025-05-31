@@ -9,13 +9,3 @@ class QuestionHeader(Background):
         self.textFont = textFont
         self.textSurface = self.textFont.render(self.text, True, self.textColor)
         self.textRect = self.textSurface.get_rect(center=self.rect.center)
-
-    def drawWithText(self,screen):
-        self.drawObject(screen)
-        self.textRect.center = self.rect.center
-        screen.blit(self.textSurface, self.textRect)
-
-    def updateText(self, new_text):
-        self.text = new_text
-        self.textSurface = self.textFont.render(self.text, True, self.textColor)
-        self.textRect = self.textSurface.get_rect(center=self.rect.center)
