@@ -21,4 +21,4 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         game.handle(event)
-        
+    game.handle(None)  

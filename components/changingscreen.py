@@ -40,7 +40,7 @@ class Question():
 
 class ChangeQuestion(Command):
 
-    allQuestions = []
+    questionHistory = []
     
     
     def __init__(self,question,newQuestionTitle,newAnswer,newAnswers):
@@ -51,29 +51,16 @@ class ChangeQuestion(Command):
     
     def execute(self):
 
-        ChangeQuestion.allQuestions.append(self.question)
+        ChangeQuestion.questionHistory.append((self.question.questionTitle,self.question.answers,self.question.answer))
         self.question.setQuestion(self.newQuestionTitle,self.newAnswer,self.newAnswers)
+    
+    def __str__(self):
+        return f"{ChangeQuestion.questionHistory}"
 
-class RedrawButton(Command):
-
-    allButtons = []
-
-    def __init__(self,button,newText):
-        self.button = button
-        self.newText = newText
-
-    def execute(self):
-        RedrawButton.allButtons.append(self.button)
-        self.button.updateText(self.newText)
-
-    '''
-    def undo(self):
-        if RedrawButton.allButtons:
-            lastButton = RedrawButton.allButtons.pop() ---> nie będzie działać z tym w jaki sposób zaciągam pytania
-            lastButton.drawWithText()
-    '''
 
 class QuestionScreen(Setup):
+
+    correctQuestions = 0
 
     def __init__(self, questions):
 
@@ -89,7 +76,7 @@ class QuestionScreen(Setup):
         self.buttons = [self.b1, self.b2, self.b3, self.b4]
         self.header = QuestionHeader(640,100,self.buttonWidth,self.buttonHeight,self.currentQuestion.questionTitle,self.font,self.fontColor , self.backgroundColor)
         self.objects = self.buttons + [self.header]
-        #self.commandHistory = []
+
         
 
     @staticmethod
@@ -104,17 +91,31 @@ class QuestionScreen(Setup):
         for object in self.objects:
             object.drawWithText(self.screen)
 
+    def newQuestion(self):
+
+        newQuestion = self.randomQuestion(self.questions)
+        ChangeQuestion(self.currentQuestion,newQuestion[0],newQuestion[-1],newQuestion[1:-1]).execute() 
+        self.header.updateText(self.currentQuestion.questionTitle)
 
     def changeQuestionScreen(self,event):
 
+        if event is None:
+            self.newQuestion()
+            for button, j in zip(self.buttons, range(4)):
+                button.updateText(self.currentQuestion.answers[j])
+            return
+ 
+
         for button in self.objects:
             if button.isClicked(event):
-                  
-                newQuestion = self.randomQuestion(self.questions)
-                self.header.updateText(self.currentQuestion.questionTitle)
-                ChangeQuestion(self.currentQuestion,newQuestion[0],newQuestion[-1],newQuestion[1:-1]).execute() #kwestia do przemyslenia czy nadpisywać pytanie
+                if button.text == self.currentQuestion.answer:
+                    QuestionScreen.correctQuestions += 1
+                self.newQuestion()
                 for button, j in zip(self.buttons, range(4)):
-                    RedrawButton(button, self.currentQuestion.answers[j]).execute() #później poprzez historie komend można zrobić wracanie do pytań
+                    button.updateText(self.currentQuestion.answers[j])
+                break
+    
+        
 
 class Screen(Setup):
 
@@ -128,9 +129,13 @@ class Screen(Setup):
         self.questionScreen = QuestionScreen(questions)
         self.questions = questions
         self.screen.fill("teal") 
+        self.startTime = pygame.time.get_ticks()
+        self.questionDuration = 31000
         
 
     def handle(self,event):
+
+        elapsedTime = pygame.time.get_ticks() - self.startTime
 
         if Screen.currentScreen == 'start':
             self.screen.fill("teal")
@@ -139,15 +144,29 @@ class Screen(Setup):
             if self.startButton.isClicked(event):
                 Screen.currentScreen = 'questions'
             
-        elif Screen.currentScreen == 'questions' and len(ChangeQuestion.allQuestions) != 19:
-            self.screen.fill("teal") 
+        elif Screen.currentScreen == 'questions' and len(ChangeQuestion.questionHistory) != 19:
+            remainingTime = max(0, (self.questionDuration - elapsedTime) // 1000)
+            timerText = self.font.render(f"Czas: {remainingTime}", True, (255, 0, 0))
+            correct = self.font.render(str(QuestionScreen.correctQuestions),1,self.fontColor,None)
+            
+            self.screen.fill("teal")
+            self.screen.blit(timerText, (500, 0))
+            self.screen.blit(correct,(0,0),None)
             self.questionScreen.drawQuestionScreen()
             pygame.display.flip()
-            if event:
+
+            if event is not None and event.type == pygame.MOUSEBUTTONDOWN:
                 self.questionScreen.changeQuestionScreen(event)
+                self.startTime = pygame.time.get_ticks()
+
+
+            if elapsedTime >= self.questionDuration:
+                self.questionScreen.changeQuestionScreen(None)  
+                self.startTime = pygame.time.get_ticks()
+
         else:
             self.screen.fill("teal")
-            text = self.font.render("Sigma!", True, (255, 255, 255))
+            text = self.font.render(f"{QuestionScreen.correctQuestions}/20", True, (255, 255, 255))
             self.screen.blit(text, (100, 200))
             pygame.display.flip()
             

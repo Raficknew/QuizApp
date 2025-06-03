@@ -28,10 +28,13 @@ class Background(Object):
         pygame.draw.rect(screen, self.backgroundColor , self.rect)
     
     def isClicked(self,event):
+        if event == None:
+            return False
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.rect.collidepoint(event.pos):
                 return True
         return False
+
     
     def drawWithText(self,screen):
         self.drawObject(screen)
