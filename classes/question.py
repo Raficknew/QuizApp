@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
 
+import pygame
+
 from classes.lifebuoys import LifelineContext, CallAFriend, FiftyFifty
 from classes.setup import Setup
 from components.button import Rect_Button
@@ -98,6 +100,9 @@ class QuestionScreen(Setup):
         self.used_lifelines = {"50/50": False, "call": False}
         self.current_lifeline_result = None
 
+        self.call_message = None
+        self.call_message_time = 0
+
     @staticmethod
     def randomQuestion(questions):
 
@@ -106,9 +111,20 @@ class QuestionScreen(Setup):
         return element
 
     def drawQuestionScreen(self):
-
         for object in self.objects:
             object.drawWithText(self.screen)
+
+
+        if self.call_message:
+            current_time = pygame.time.get_ticks()
+            if current_time - self.call_message_time <= 3000:
+
+                pygame.draw.rect(self.screen, (255, 255, 255), (200, 50, 880, 60))
+
+                text_surface = self.font.render(self.call_message, True, (0, 0, 0))
+                self.screen.blit(text_surface, (220, 60))
+            else:
+                self.call_message = None  #
 
     def newQuestion(self):
         newQuestion = self.randomQuestion(self.questions)
@@ -133,15 +149,22 @@ class QuestionScreen(Setup):
             if self.b50 in self.objects:
                 self.objects.remove(self.b50)
 
+
         elif name == "call" and not self.used_lifelines["call"]:
+
             lifeline = LifelineContext(CallAFriend())
+
             suggestion = lifeline.execute(self.currentQuestion)
-            print(f"Przyjaciel sugeruje: {suggestion}")
+
             self.used_lifelines["call"] = True
 
+            self.call_message = f"Przyjaciel sugeruje: {suggestion}"
+
+            self.call_message_time = pygame.time.get_ticks()
 
             if self.bPhone in self.buttons:
                 self.buttons.remove(self.bPhone)
+
             if self.bPhone in self.objects:
                 self.objects.remove(self.bPhone)
 
