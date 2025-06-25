@@ -18,3 +18,5 @@ Jakie jest główne miasto Włoch?|Rzym|Mediolan|Neapol|Florencja|Rzym
 Który narząd odpowiada za pompowanie krwi?|Wątroba|Płuca|Serce|Nerki|Serce
 Które z poniższych zwierząt jest owadem?|Pająk|Skorpion|Mrówka|Żaba|Mrówka
 Jak nazywa się stolica Japonii?|Kioto|Tokio|Osaka|Hiroshima|Tokio
+rudy?|cwel|ciota|pedał|zjeb|cwel
+ulubiona pozycja?|na pieska|na rafałka|na czupakabre|klasyczna|na rafałka
