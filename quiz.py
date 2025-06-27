@@ -1,24 +1,21 @@
 import pygame
-from components.changingscreen import  Screen
 
-q = []
-with open('all_questions/questions0.txt','r',encoding='utf-8') as data:
-    questions = data.read()
-    questions = questions.split('\n')
-    for question in questions:
-        q.append(question.split('|'))
-    
+from classes.quiz import RandomQuiz
+from components.changingscreen import Screen
 
-       
 pygame.init()
 
 running = True
 
-game = Screen(q)
+quiz = RandomQuiz()
+quiz.run()
+questions = quiz.get_questions()
+
+game = Screen(questions)
 
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         game.handle(event)
-    game.handle(None)  
+    game.handle(None)
