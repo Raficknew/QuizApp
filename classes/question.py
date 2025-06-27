@@ -93,7 +93,7 @@ class QuestionScreen(Setup):
         self.bPhone = Rect_Button(170, 700, 100, self.buttonHeight, "Phone", self.font,
                                self.fontColor, self.backgroundColor)
         self.buttons = [self.b1, self.b2, self.b3, self.b4, self.b50, self.bPhone]
-        self.header = QuestionHeader(640, 100, self.buttonWidth, self.buttonHeight, self.currentQuestion.questionTitle,
+        self.header = QuestionHeader(640, 100, 950, self.buttonHeight, self.currentQuestion.questionTitle,
                                      self.font, self.fontColor, self.backgroundColor)
         self.objects = self.buttons + [self.header]
 
