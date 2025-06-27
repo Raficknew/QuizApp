@@ -9,9 +9,8 @@ running = True
 
 quiz = RandomQuiz()
 quiz.run()
-questions = quiz.get_questions()
 
-game = Screen(questions)
+game = Screen(quiz.questions)
 
 while running:
     for event in pygame.event.get():

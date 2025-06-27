@@ -1,6 +1,7 @@
 class Quiz:
     def run(self):
         self.load_questions()
+        self.get_questions()
 
     def load_questions(self):
         raise NotImplementedError
