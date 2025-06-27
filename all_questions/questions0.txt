@@ -1,21 +1,20 @@
-Jaki jest największy ocean na Ziemi?|Ocean Atlantycki|Ocean Indyjski|Ocean Arktyczny|Ocean Spokojny|Ocean Spokojny
-Który pierwiastek chemiczny ma symbol 'O'?|Złoto|Tlen|Rtęć|Wodór|Tlen
-Ile kontynentów jest na Ziemi?|5|6|7|8|7
-Stolica Francji to:|Berlin|Madryt|Rzym|Paryż|Paryż
-Który kraj ma największą populację?|Indie|USA|Chiny|Rosja|Chiny
-Który z tych języków jest językiem programowania?|HTML|Python|CSS|SQL|Python
-Który z tych zwierząt jest ssakiem?|Rekin|Delfin|Żółw|Pingwin|Delfin
-Jakie jest największe państwo na świecie pod względem powierzchni?|Kanada|Chiny|Rosja|USA|Rosja
-W którym roku wybuchła II wojna światowa?|1939|1914|1945|1920|1939
-Która planeta jest najbliższa Słońcu?|Wenus|Ziemia|Merkury|Mars|Merkury
-Jak nazywa się proces zamiany cieczy w parę?|Skraplanie|Parowanie|Sublimacja|Kondensacja|Parowanie
-Które z poniższych państw nie leży w Europie?|Norwegia|Grecja|Turcja|Egipt|Egipt
-Co oznacza skrót CPU?|Central Processing Unit|Computer Personal Unit|Central Power Unit|Control Processing Unit|Central Processing Unit
-Która liczba jest liczbą pierwszą?|9|15|13|21|13
-Jak nazywa się najwyższy szczyt świata?|K2|Makalu|Everest|Lhotse|Everest
-Która planeta nazywana jest Czerwoną Planetą?|Mars|Saturn|Ziemia|Wenus|Mars
-Jakie jest główne miasto Włoch?|Rzym|Mediolan|Neapol|Florencja|Rzym
-Który narząd odpowiada za pompowanie krwi?|Wątroba|Płuca|Serce|Nerki|Serce
-Które z poniższych zwierząt jest owadem?|Pająk|Skorpion|Mrówka|Żaba|Mrówka
-Jak nazywa się stolica Japonii?|Kioto|Tokio|Osaka|Hiroshima|Tokio
-SIGMA?|SIGMA|NIE|MATI|RAFAŁ|MATI
+Co oznacza skrót OOP?|Object-Oriented Programming|Open Operating Procedure|Optimal Object Placement|Ordered Output Process|Object-Oriented Programming
+Jak zdefiniować klasę w Pythonie?|function MyClass:|class MyClass:|def MyClass:|module MyClass:|class MyClass:
+Co oznacza self w metodzie klasy?|Odwołanie do bieżącego modułu|Odwołanie do aktualnego obiektu klasy|Odwołanie do globalnej zmiennej|Odwołanie do funkcji nadrzędnej|Odwołanie do aktualnego obiektu klasy
+Jak wywołać konstruktor w klasie Python?|def __init__(self):|def constructor(self):|def init(self):|def __start__(self):|def __init__(self):
+Jak utworzyć nowy obiekt klasy Car?|car = new Car()|car = Car.new()|car = Car()|car = Car.create()|car = Car()
+Co robi metoda __str__ w klasie?|Zwraca długość obiektu|Definiuje sposób konwersji obiektu na string|Usuwa obiekt z pamięci|Tworzy nowy obiekt|Definiuje sposób konwersji obiektu na string
+Która z poniższych metod jest statyczna?|def method(self):|@staticmethod def method():|def method(cls):|@classmethod def method(self):|@staticmethod def method()
+Jak zadeklarować metodę klasową?|def method(self):|@staticmethod def method():|@classmethod def method(cls):|def method(cls):|@classmethod def method(cls):
+Co to jest dziedziczenie?|Tworzenie nowej klasy bazującej na istniejącej|Ukrywanie metod klasy|Usuwanie obiektów|Konwersja typu danych|Tworzenie nowej klasy bazującej na istniejącej
+Jak odwołać się do metody klasy bazowej w klasie potomnej?|super().method()|self.base.method()|parent.method()|base.method()|super().method()
+Co to jest enkapsulacja?|Ukrywanie szczegółów implementacji wewnątrz klasy|Dziedziczenie metod|Tworzenie instancji klasy|Tworzenie modułu|Ukrywanie szczegółów implementacji wewnątrz klasy
+Jak zdefiniować atrybut prywatny w Pythonie?|self._name|self.__name|private name|self#name|self.__name
+Co robi dekorator @property?|Tworzy metodę statyczną|Umożliwia dostęp do metody jak do atrybutu|Ukrywa atrybut|Definiuje konstruktor|Umożliwia dostęp do metody jak do atrybutu
+Jak nazywa się metoda wywoływana podczas usuwania obiektu?|__del__|__delete__|__remove__|__destroy__|__del__
+Co oznacza polimorfizm w OOP?|Możliwość wywołania tej samej metody na różnych obiektach|Tworzenie wielu obiektów z jednej klasy|Ukrywanie metod|Definiowanie metod statycznych|Możliwość wywołania tej samej metody na różnych obiektach
+Jak zadeklarować, że klasa B dziedziczy po klasie A?|class B(A):|class B extends A:|class B inherits A:|class B -> A:|class B(A):
+Co to jest metoda abstrakcyjna?|Metoda zdefiniowana w klasie bazowej, ale bez implementacji|Metoda statyczna|Metoda prywatna|Metoda wywoływana automatycznie przy tworzeniu obiektu|Metoda zdefiniowana w klasie bazowej, ale bez implementacji
+Która biblioteka w Pythonie umożliwia tworzenie klas abstrakcyjnych?|abc|abstract|classlib|interface|abc
+Jak zadeklarować atrybut klasowy (statyczny)?|Wewnątrz metody __init__|Poza metodami, bez self|Za pomocą dekoratora @classmethod|Za pomocą self.static|Poza metodami, bez self
+Co zwróci isinstance(obj, MyClass)?|True jeśli obj jest instancją MyClass lub jej podklasy|False zawsze|True jeśli obj jest klasą MyClass|False jeśli obj jest instancją MyClass|True jeśli obj jest instancją MyClass lub jej podklasy

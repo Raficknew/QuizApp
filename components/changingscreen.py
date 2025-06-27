@@ -121,8 +121,10 @@ class Screen(Setup):
             pygame.display.flip()
 
             if event is not None and event.type == pygame.MOUSEBUTTONDOWN:
-                self.questionScreen.changeQuestionScreen(event)
-                self.startTime = pygame.time.get_ticks()
+                for i in self.questionScreen.buttons:
+                    if i.isClicked(event):
+                        self.questionScreen.changeQuestionScreen(event)
+                        self.startTime = pygame.time.get_ticks()
 
             if elapsedTime >= self.questionDuration:
                 self.questionScreen.changeQuestionScreen(None)

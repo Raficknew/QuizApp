@@ -94,7 +94,7 @@ class QuestionScreen(Setup):
                                self.fontColor, self.backgroundColor)
         self.buttons = [self.b1, self.b2, self.b3, self.b4, self.b50, self.bPhone]
         self.header = QuestionHeader(640, 100, 950, self.buttonHeight, self.currentQuestion.questionTitle,
-                                     self.font, self.fontColor, self.backgroundColor)
+                                     self.font, (255,255,255), self.backgroundColor)
         self.objects = self.buttons + [self.header]
 
         self.used_lifelines = {"50/50": False, "call": False}

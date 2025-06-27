@@ -1,5 +1,5 @@
 from components.button import Background
-
+import pygame
 
 class QuestionHeader(Background):
     def __init__(self, x, y, width, height, text, textFont, textColor,backgroundColor):
@@ -9,3 +9,7 @@ class QuestionHeader(Background):
         self.textFont = textFont
         self.textSurface = self.textFont.render(self.text, True, self.textColor)
         self.textRect = self.textSurface.get_rect(center=self.rect.center)
+    
+    def drawWithText(self,screen):
+        self.textRect.center = self.rect.center
+        screen.blit(self.textSurface, self.textRect)
