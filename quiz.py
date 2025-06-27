@@ -3,11 +3,13 @@ import pygame
 from classes.quiz import RandomQuiz
 from components.changingscreen import Screen
 
+
+
 pygame.init()
 
 running = True
 
-quiz = RandomQuiz()
+quiz = RandomQuiz('all_questions/OOP_quiz.txt')
 quiz.run()
 
 game = Screen(quiz.questions)

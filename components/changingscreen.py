@@ -3,24 +3,27 @@ from abc import ABC, abstractmethod
 from classes.question import QuestionScreen, ChangeQuestion
 from classes.setup import Setup
 from components.button import Rect_Button
-from components.questionHeader import QuestionHeader
+from classes.question import QuestionHeader
 import pygame
 from random import choice
+from classes.quiz import RandomQuiz
+
+
+
 
 class ErrorDodawaniaPytan(Exception):
     pass
 
 class Screen(Setup):
     currentScreen = "menu"
-
+    
     def __init__(self, questions):
         super().__init__()
         self.questions = questions
         self.questionScreen = QuestionScreen(questions)
-
         self.startButton = Rect_Button(640, 300, self.buttonWidth, self.buttonHeight, 'Start', self.font, self.fontColor, self.backgroundColor)
         self.goToAddQuestionButton = Rect_Button(640, 420, self.buttonWidth, self.buttonHeight, 'Dodaj pytanie', self.font, self.fontColor, self.backgroundColor)
-
+        self.chooseQuizButton = Rect_Button(640, 540, self.buttonWidth, self.buttonHeight, 'Wybierz zestaw pytań', self.font, self.fontColor, self.backgroundColor)
         self.newQuestion = ''
         self.newAnswers = ['', '', '', '']
         self.correctAnswer = ''
@@ -35,26 +38,29 @@ class Screen(Setup):
         self.activeInput = None
         self.addQuestionButton = Rect_Button(640, 550, 300, 70, 'Dodaj pytanie', self.font, self.fontColor, self.backgroundColor)
         self.backButton = Rect_Button(640, 640, 300, 70, 'Powrót', self.font, self.fontColor, self.backgroundColor)
-
+        self.menuButtons = [self.chooseQuizButton,self.goToAddQuestionButton,self.startButton]
         self.startTime = pygame.time.get_ticks()
         self.questionDuration = 31000
 
     def handle(self, event):
         elapsedTime = pygame.time.get_ticks() - self.startTime
 
+        #przydała  by sie klasa menu screen
         if Screen.currentScreen == "menu":
             self.screen.fill("teal")
-            self.startButton.drawWithText(self.screen)
-            self.goToAddQuestionButton.drawWithText(self.screen)
+            for i in self.menuButtons:
+                i.drawWithText(self.screen)
             pygame.display.flip()
-
             if event is not None and event.type == pygame.MOUSEBUTTONDOWN:
                 if self.startButton.isClicked(event):
                     Screen.currentScreen = "questions"
                     self.startTime = pygame.time.get_ticks()
                 elif self.goToAddQuestionButton.isClicked(event):
                     Screen.currentScreen = "add_question"
-
+                elif self.chooseQuizButton.isClicked(event):
+                    Screen.currentScreen = "choose_quiz"
+        
+        #można zrobić klase addquestion screen
         elif Screen.currentScreen == "add_question":
             self.screen.fill("teal")
 
@@ -109,7 +115,23 @@ class Screen(Setup):
                         elif self.activeInput == 5:
                             self.correctAnswer += char
 
-        elif Screen.currentScreen == 'questions' and len(ChangeQuestion.questionHistory) != 20:
+        elif Screen.currentScreen == 'choose_quiz':
+            self.screen.fill("teal")
+            OOP = Rect_Button(640, 550, 300, 70, 'OOP quiz', self.font, self.fontColor, self.backgroundColor)
+            custom_quiz = Rect_Button(640, 400, 300, 70, 'custom quiz', self.font, self.fontColor, self.backgroundColor)
+            for i in [OOP,custom_quiz]:
+                i.drawWithText(self.screen)
+                if i.isClicked(event):
+                    quizName = i.text.lower().replace(" ", "_")
+                    newQuestions = RandomQuiz(f"all_questions/{quizName}.txt")
+                    newQuestions.run()
+                    self.questionScreen = QuestionScreen(newQuestions.questions)
+                    self.questions = newQuestions.questions
+                    Screen.currentScreen = "menu"
+            pygame.display.flip()
+            
+
+        elif Screen.currentScreen == 'questions' and len(ChangeQuestion.questionHistory) != 19:
             remainingTime = max(0, (self.questionDuration - elapsedTime) // 1000)
             timerText = self.font.render(f"Czas: {remainingTime}", True, (255, 0, 0))
             correct = self.font.render(str(QuestionScreen.correctQuestions), 1, self.fontColor, None)
@@ -147,13 +169,12 @@ class Screen(Setup):
             if self.correctAnswer.strip() not in [a.strip() for a in self.newAnswers]:
                 raise ErrorDodawaniaPytan("Poprawna odpowiedź musi znajdować się wśród odpowiedzi.")
 
-            with open('all_questions/questions0.txt', 'a', encoding='utf-8') as f:
+            with open('all_questions/custom_quiz.txt', 'a', encoding='utf-8') as f:
                 line = f"\n{self.newQuestion.strip()}|{self.newAnswers[0].strip()}|{self.newAnswers[1].strip()}|{self.newAnswers[2].strip()}|{self.newAnswers[3].strip()}|{self.correctAnswer.strip()}"
                 f.write(line)
 
             print("Dodano poprawne pytanie!")
 
-            # Reset pól po dodaniu pytania
             self.newQuestion = ''
             self.newAnswers = ['', '', '', '']
             self.correctAnswer = ''
