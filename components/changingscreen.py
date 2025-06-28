@@ -7,7 +7,7 @@ from classes.question import QuestionHeader
 import pygame
 from random import choice
 from classes.quiz import RandomQuiz
-
+import time
 
 class ErrorDodawaniaPytan(Exception):
     pass
@@ -40,11 +40,13 @@ class Screen(Setup):
         self.startTime = pygame.time.get_ticks()
         self.questionDuration = 31000
         self.currentQuizFile = "all_questions/OOP_quiz.txt"
+        self.waitingForNextQuestion = False
+        self.answerShownTime = 0
+        self.answerDisplayDuration = 1000
 
     def handle(self, event):
         elapsedTime = pygame.time.get_ticks() - self.startTime
 
-        #przydała  by sie klasa menu screen
         if Screen.currentScreen == "menu":
             self.screen.fill("teal")
             for i in self.menuButtons:
@@ -59,7 +61,7 @@ class Screen(Setup):
                 elif self.chooseQuizButton.isClicked(event):
                     Screen.currentScreen = "choose_quiz"
         
-        #można zrobić klase addquestion screen
+
         elif Screen.currentScreen == "add_question":
             self.screen.fill("teal")
 
@@ -133,30 +135,68 @@ class Screen(Setup):
             pygame.display.flip()
             
 
-        elif Screen.currentScreen == 'questions' and len(ChangeQuestion.questionHistory) != 19:
+        elif Screen.currentScreen == 'questions' and len(ChangeQuestion.questionHistory) != 20:
+            elapsedTime = pygame.time.get_ticks() - self.startTime
+            self.screen.fill("teal")
             remainingTime = max(0, (self.questionDuration - elapsedTime) // 1000)
             timerText = self.font.render(f"Czas: {remainingTime}", True, (255, 0, 0))
-            correct = self.font.render(str(QuestionScreen.correctQuestions), 1, self.fontColor, None)
-
-            self.screen.fill("teal")
             self.screen.blit(timerText, (580, 0))
-            self.screen.blit(correct, (0, 0), None)
             self.questionScreen.drawQuestionScreen()
             pygame.display.flip()
 
-            if event is not None and event.type == pygame.MOUSEBUTTONDOWN:
+            currentTime = pygame.time.get_ticks()
+
+            if self.waitingForNextQuestion:
+                currentTime = pygame.time.get_ticks()
+                if currentTime - self.answerShownTime >= self.answerDisplayDuration:
+                    self.questionScreen.changeQuestionScreen(None)
+                    for i in self.questionScreen.buttons:
+                        i.backgroundColor = (255, 255, 255)
+                        i.drawWithText(self.screen)
+                    pygame.display.flip()
+                    self.startTime = pygame.time.get_ticks()
+                    self.waitingForNextQuestion = False
+        
+            elif elapsedTime >= self.questionDuration and not self.waitingForNextQuestion:
+                for j in self.questionScreen.buttons[:4]:
+                    if j.text == self.questionScreen.currentQuestion.answer:
+                        j.backgroundColor = (0, 255, 0)
+                    else:
+                        j.backgroundColor = (255, 0, 0)
+                    j.drawWithText(self.screen)
+                pygame.display.flip()
+                self.waitingForNextQuestion = True
+                self.answerShownTime = pygame.time.get_ticks()
+    
+            elif event is not None and event.type == pygame.MOUSEBUTTONDOWN:
                 for i in self.questionScreen.buttons:
                     if i.isClicked(event):
-                        self.questionScreen.changeQuestionScreen(event)
-                        self.startTime = pygame.time.get_ticks()
+                        if i.text == self.questionScreen.currentQuestion.answer:
+                            self.questionScreen.correctQuestions += 1
+                            print(self.questionScreen.correctQuestions)
+                        if i.text != "50/50" and i.text != "Phone":
+                            for j in self.questionScreen.buttons[:4]:
+                                if j.text == self.questionScreen.currentQuestion.answer:
+                                    
+                                    j.backgroundColor = (0, 255, 0)
+                                else:
+                                    j.backgroundColor = (255, 0, 0)
+                                j.drawWithText(self.screen)
+                            pygame.display.flip()
+                            self.waitingForNextQuestion = True
+                            self.answerShownTime = currentTime
 
-            if elapsedTime >= self.questionDuration:
-                self.questionScreen.changeQuestionScreen(None)
-                self.startTime = pygame.time.get_ticks()
+                        elif i.text == "50/50":
+                            self.questionScreen.applyLifeline("50/50")
+                        elif i.text == "Phone":
+                            self.questionScreen.applyLifeline("call")
+                        break
 
+           
+            
         else:
             self.screen.fill("teal")
-            text = self.font.render(f"Uzyskano {QuestionScreen.correctQuestions}/20", True, (255, 255, 255))
+            text = self.font.render(f"Uzyskano {self.questionScreen.correctQuestions}/20", True, (255, 255, 255))
             self.screen.blit(text, (540, 100))
             RetryQuizButton = Rect_Button(640, 300, self.buttonWidth, self.buttonHeight, 'Spróbuj ponownie',
                                                      self.font, self.fontColor, self.backgroundColor)
