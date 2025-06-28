@@ -1,11 +1,10 @@
 from abc import ABC, abstractmethod
 
 import pygame
-
+from classes.background import Background
 from classes.lifebuoys import LifelineContext, CallAFriend, FiftyFifty
 from classes.setup import Setup
 from components.button import Rect_Button
-from components.questionHeader import QuestionHeader
 from random import choice
 
 class Command(ABC):
@@ -94,7 +93,7 @@ class QuestionScreen(Setup):
                                self.fontColor, self.backgroundColor)
         self.buttons = [self.b1, self.b2, self.b3, self.b4, self.b50, self.bPhone]
         self.header = QuestionHeader(640, 100, 950, self.buttonHeight, self.currentQuestion.questionTitle,
-                                     self.font, self.fontColor, self.backgroundColor)
+                                     self.font, (255,255,255), self.backgroundColor)
         self.objects = self.buttons + [self.header]
 
         self.used_lifelines = {"50/50": False, "call": False}
@@ -193,3 +192,15 @@ class QuestionScreen(Setup):
                 break
 
 
+class QuestionHeader(Background):
+    def __init__(self, x, y, width, height, text, textFont, textColor,backgroundColor):
+        super().__init__(x, y, width, height, backgroundColor)
+        self.text = text
+        self.textColor = textColor
+        self.textFont = textFont
+        self.textSurface = self.textFont.render(self.text, True, self.textColor)
+        self.textRect = self.textSurface.get_rect(center=self.rect.center)
+    
+    def drawWithText(self,screen):
+        self.textRect.center = self.rect.center
+        screen.blit(self.textSurface, self.textRect)

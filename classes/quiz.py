@@ -11,13 +11,15 @@ class Quiz:
 
 
 class RandomQuiz(Quiz):
-    def __init__(self):
+    
+    def __init__(self,textFile):
         self.questions = []
+        self.textFile = textFile
 
     def load_questions(self):
-        with open('all_questions/questions0.txt', 'r', encoding='utf-8') as data:
-            questions = data.read()
-            questions = questions.split('\n')
+        
+        with open(self.textFile, 'r', encoding='utf-8') as data:
+            questions = data.read().split('\n')
             for question in questions:
                 self.questions.append(question.split('|'))
 
