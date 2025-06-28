@@ -9,8 +9,6 @@ from random import choice
 from classes.quiz import RandomQuiz
 
 
-
-
 class ErrorDodawaniaPytan(Exception):
     pass
 
@@ -41,6 +39,7 @@ class Screen(Setup):
         self.menuButtons = [self.chooseQuizButton,self.goToAddQuestionButton,self.startButton]
         self.startTime = pygame.time.get_ticks()
         self.questionDuration = 31000
+        self.currentQuizFile = "all_questions/OOP_quiz.txt"
 
     def handle(self, event):
         elapsedTime = pygame.time.get_ticks() - self.startTime
@@ -117,13 +116,16 @@ class Screen(Setup):
 
         elif Screen.currentScreen == 'choose_quiz':
             self.screen.fill("teal")
-            OOP = Rect_Button(640, 550, 300, 70, 'OOP quiz', self.font, self.fontColor, self.backgroundColor)
-            custom_quiz = Rect_Button(640, 400, 300, 70, 'custom quiz', self.font, self.fontColor, self.backgroundColor)
+            OOP = Rect_Button(640, 300, self.buttonWidth, self.buttonHeight, 'OOP Quiz',
+                                          self.font, self.fontColor, self.backgroundColor)
+            custom_quiz = Rect_Button(640, 420, self.buttonWidth, self.buttonHeight, 'custom_quiz', self.font,
+                                           self.fontColor, self.backgroundColor)
             for i in [OOP,custom_quiz]:
                 i.drawWithText(self.screen)
                 if i.isClicked(event):
                     quizName = i.text.lower().replace(" ", "_")
-                    newQuestions = RandomQuiz(f"all_questions/{quizName}.txt")
+                    self.currentQuizFile = f"all_questions/{quizName}.txt"
+                    newQuestions = RandomQuiz(self.currentQuizFile)
                     newQuestions.run()
                     self.questionScreen = QuestionScreen(newQuestions.questions)
                     self.questions = newQuestions.questions
@@ -137,7 +139,7 @@ class Screen(Setup):
             correct = self.font.render(str(QuestionScreen.correctQuestions), 1, self.fontColor, None)
 
             self.screen.fill("teal")
-            self.screen.blit(timerText, (500, 0))
+            self.screen.blit(timerText, (580, 0))
             self.screen.blit(correct, (0, 0), None)
             self.questionScreen.drawQuestionScreen()
             pygame.display.flip()
@@ -154,8 +156,50 @@ class Screen(Setup):
 
         else:
             self.screen.fill("teal")
-            text = self.font.render(f"{QuestionScreen.correctQuestions}/20", True, (255, 255, 255))
-            self.screen.blit(text, (100, 200))
+            text = self.font.render(f"Uzyskano {QuestionScreen.correctQuestions}/20", True, (255, 255, 255))
+            self.screen.blit(text, (540, 100))
+            RetryQuizButton = Rect_Button(640, 300, self.buttonWidth, self.buttonHeight, 'Spróbuj ponownie',
+                                                     self.font, self.fontColor, self.backgroundColor)
+            ChangeQuizButton = Rect_Button(640, 420, self.buttonWidth, self.buttonHeight, 'Zmień Quiz', self.font,
+                                           self.fontColor, self.backgroundColor)
+            MenuButton = Rect_Button(640, 540, self.buttonWidth, self.buttonHeight, 'Menu',
+                                                self.font, self.fontColor, self.backgroundColor)
+
+            RetryQuizButton.drawWithText(self.screen)
+            ChangeQuizButton.drawWithText(self.screen)
+            MenuButton.drawWithText(self.screen)
+
+            if event is not None and event.type == pygame.MOUSEBUTTONDOWN:
+
+                if ChangeQuizButton.isClicked(event):
+                    Screen.currentScreen = "choose_quiz"
+                    ChangeQuestion.questionHistory = []
+                    QuestionScreen.correctQuestions = 0
+
+                if RetryQuizButton.isClicked(event):
+                    ChangeQuestion.questionHistory = []
+                    QuestionScreen.correctQuestions = 0
+
+                    newQuestions = RandomQuiz(self.currentQuizFile)
+                    newQuestions.run()
+                    self.questions = newQuestions.questions
+                    self.questionScreen = QuestionScreen(self.questions)
+                    Screen.currentScreen = "questions"
+                    self.startTime = pygame.time.get_ticks()
+
+                if MenuButton.isClicked(event):
+                    ChangeQuestion.questionHistory = []
+                    QuestionScreen.correctQuestions = 0
+
+                    newQuestions = RandomQuiz(self.currentQuizFile)
+                    newQuestions.run()
+                    self.questions = newQuestions.questions
+                    self.questionScreen = QuestionScreen(self.questions)
+                    Screen.currentScreen = "menu"
+
+
+
+
             pygame.display.flip()
 
     def saveNewQuestionToFile(self):
