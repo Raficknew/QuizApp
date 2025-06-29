@@ -12,6 +12,11 @@ class Rect_Button(Background):
         self.textSurface = self.textFont.render(self.text, True, self.textColor)
         self.textRect = self.textSurface.get_rect(center=self.rect.center)
 
+    @property
+    def backgroundColor(self):
+        return self._backgroundColor
 
-
+    @backgroundColor.setter
+    def backgroundColor(self, newColor):
+        self._backgroundColor = newColor
 

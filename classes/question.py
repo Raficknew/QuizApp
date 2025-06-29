@@ -79,6 +79,7 @@ class QuestionScreen(Setup):
         self.currentQuestion = Question(self.firstRandomQuestion[0], self.firstRandomQuestion[1:-1],
                                         self.firstRandomQuestion[-1])
         self.questions.remove(self.firstRandomQuestion)
+        self.font = pygame.font.SysFont("Arial", 26)
         self.b1 = Rect_Button(640, 250, self.buttonWidth, self.buttonHeight, self.currentQuestion.answers[0], self.font,
                               self.fontColor, self.backgroundColor)
         self.b2 = Rect_Button(640, 370, self.buttonWidth, self.buttonHeight, self.currentQuestion.answers[1], self.font,
@@ -110,6 +111,7 @@ class QuestionScreen(Setup):
         return element
 
     def drawQuestionScreen(self):
+
         for object in self.objects:
             object.drawWithText(self.screen)
 
